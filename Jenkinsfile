@@ -20,36 +20,36 @@ pipeline {
                 stage("3. Maven Unit Test") {  
             // Test the individual units of code 
             steps{
-                dir ("javapp"){
+                
                   sh 'mvn test'        
                 }
             }
-        }
+        
 
         stage('4. Maven Build') {
             // Build the application into an executable file (.jar)
             steps{
-                dir ("javapp"){
+               
                   sh 'mvn clean install'   
                 }
             }
-        }
+        
 
         stage("5. Maven Integration Test") {
             //  Test the interaction between different units of code
             steps{
-                dir ("javapp"){
+                
                   sh 'mvn verify'          
                 }
             }
-        }
+        
        stage('archive and test result'){
           steps{
-            dir ("javapp"){ 
+            
             junit '**/surefire-reports/*.xml'
             archiveArtifacts artifacts: '**/*.war', followSymlinks: false
             }
-        }
+        
        }
     }   
        
