@@ -38,17 +38,19 @@ pipeline {
         stage("5. Maven Integration Test") {
             //  Test the interaction between different units of code
             steps{
-                dir ("javapp\Java2024"){
+                dir ("javapp/Java2024"){
                   sh 'mvn verify'          
                 }
             }
         }
        stage('archive and test result'){
           steps{
+            dir ("javapp/Java2024"){ 
             junit '**/surefire-reports/*.xml'
             archiveArtifacts artifacts: '**/*.war', followSymlinks: false
             }
         }
+       }
     }   
        
        
