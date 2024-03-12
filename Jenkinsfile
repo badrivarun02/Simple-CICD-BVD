@@ -13,46 +13,11 @@ pipeline {
             // 'Pipeline syntax' --> Steps 'Smaple step' --> git (enter url & branch & generate)
             steps {
                 
-                git branch: 'main', url: 'https://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@github.com/badrivarun02/Java2024.git', changelog: false
+                git branch: 'main', url: 'https://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@github.com/badrivarun02/Java2024.git'
                 
             }
-        }   
-        
-        stage("3. Maven Unit Test") {  
-            // Test the individual units of code 
-            steps{
-                dir ("javapp/Java2024"){
-                  sh 'mvn test'        
-                }
-            }
-        }
-
-        stage('4. Maven Build') {
-            // Build the application into an executable file (.jar)
-            steps{
-                dir ("javapp/Java2024"){
-                  sh 'mvn clean install'   
-                }
-            }
-        }
-
-        stage("5. Maven Integration Test") {
-            //  Test the interaction between different units of code
-            steps{
-                dir ("javapp/Java2024"){
-                  sh 'mvn verify'          
-                }
-            }
-        }
-       stage('archive and test result'){
-          steps{
-            dir ("javapp/Java2024"){ 
-            junit '**/surefire-reports/*.xml'
-            archiveArtifacts artifacts: '**/*.war', followSymlinks: false
-            }
-        }
-       }
-    }   
-       
-       
+        }  
+    }
 }
+        
+        
