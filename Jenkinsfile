@@ -21,7 +21,7 @@ pipeline {
             // Test the individual units of code 
             steps{
                 
-                  sh 'mvn test'        
+                  bat 'mvn test'        
                 }
             }
         
@@ -30,7 +30,7 @@ pipeline {
             // Build the application into an executable file (.jar)
             steps{
                
-                  sh 'mvn clean install'   
+                  bat 'mvn clean install'   
                 }
             }
         
@@ -39,7 +39,7 @@ pipeline {
             //  Test the interaction between different units of code
             steps{
                 
-                  sh 'mvn verify'          
+                  bat 'mvn verify'          
                 }
             }
         
