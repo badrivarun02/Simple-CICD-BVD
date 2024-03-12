@@ -46,11 +46,20 @@ pipeline {
        stage('archive and test result'){
           steps{
             
-            junit '**/surefire-reports/*.xml'
             archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
             }
         
        }
+    post{
+        always{
+            emailext (
+                    subject: "Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """<p>See the attached build log for details.</p>""",
+                    to: 'badrivarun09@gmail.com',
+                    attachLog: true
+                )
+}
+    }
     }   
        
        
