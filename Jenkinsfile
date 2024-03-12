@@ -5,7 +5,7 @@ pipeline {
         stage("1. Cleanup") {
             // Clean workspace directory for the current build
             steps {
-                deleteDir ()             
+                deleteDir ("~/*")             
             }
         }
         stage ('2. Git Checkout') {
