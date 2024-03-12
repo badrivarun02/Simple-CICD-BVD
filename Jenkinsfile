@@ -43,6 +43,13 @@ pipeline {
                 }
             }
         }
+       stage('archive and test result'){
+          steps{
+            junit '**/surefire-reports/*.xml'
+            archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+            }
+        }
+    }   
        
-    }    
+       
 }
