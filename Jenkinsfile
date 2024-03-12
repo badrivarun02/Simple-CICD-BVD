@@ -47,7 +47,7 @@ pipeline {
           steps{
             
             junit '**/surefire-reports/*.xml'
-            archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+            archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
             }
         
        }
