@@ -20,7 +20,7 @@ pipeline {
         stage("3. Maven Unit Test") {  
             // Test the individual units of code 
             steps{
-                dir ("Java2024"){
+                dir ("javapp/Java2024"){
                   sh 'mvn test'        
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
         stage('4. Maven Build') {
             // Build the application into an executable file (.jar)
             steps{
-                dir ("Java2024"){
+                dir ("javapp/Java2024"){
                   sh 'mvn clean install'   
                 }
             }
@@ -38,7 +38,7 @@ pipeline {
         stage("5. Maven Integration Test") {
             //  Test the interaction between different units of code
             steps{
-                dir ("Java2024"){
+                dir ("javapp\Java2024"){
                   sh 'mvn verify'          
                 }
             }
