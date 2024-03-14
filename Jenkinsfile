@@ -50,6 +50,11 @@ pipeline {
             }
         
        }
+      stage(' run the jar file '){
+          steps{
+              bat java -jar '**/*.jar'
+    }
+      }
     }
     post{
         always{
@@ -59,7 +64,7 @@ pipeline {
                     to: 'badrivarun09@gmail.com',
                     attachLog: true
                 )
-}
+           }
     }
      
        
