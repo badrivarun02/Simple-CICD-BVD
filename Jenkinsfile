@@ -52,7 +52,7 @@ pipeline {
        }
         stage(' run the jar file '){
           steps{
-              bat 'java -jar **/*.jar' 
+              bat 'java -jar target\\devops-integration.jar'
            }
       }
     }
