@@ -58,14 +58,14 @@ pipeline {
         stage('6. Docker Image Build') {
             // Build Docker Image 
             steps{
-                {      // go to directory where 'Dockerfile' is stored
+                    // go to directory where 'Dockerfile' is stored
                     script {
                       def JOB = env.JOB_NAME.toLowerCase()           // Convert Jenkins Job name to lower-case
                       bat "docker build -t ${JOB}:${BUILD_NUMBER} ."  // 'JOB_NAME' & 'BUILD_NUMBER' are Jenkins Global variable
                     }
                 }
             }
-        }
+        
         
         stage('7. Docker Image Tag') {
             // Rename the Docker Image before pushing to Dockerhub
