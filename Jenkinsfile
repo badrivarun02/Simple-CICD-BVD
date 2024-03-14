@@ -1,5 +1,9 @@
 pipeline {
     agent any
+     // DECLARE THE VARIABLES HERE:
+    environment {
+        DOCKER_USERNAME = "Dockeruser"     // check the 'ID' in your Jenkins credentials
+    }
 
     stages {
         stage("1. Cleanup") {
@@ -23,7 +27,7 @@ pipeline {
                 
                   bat 'mvn test'        
                 }
-            }
+        }
         
 
         stage('4. Maven Build') {
@@ -32,7 +36,7 @@ pipeline {
                
                   bat 'mvn clean install'   
                 }
-            }
+        }
         
 
         stage("5. Maven Integration Test") {
@@ -41,7 +45,7 @@ pipeline {
                 
                   bat 'mvn verify'          
                 }
-            }
+        }
         
         stage('archive and test result'){
           steps{
@@ -49,12 +53,33 @@ pipeline {
             archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
             }
         
-       }
-        stage(' run the jar file '){
-          steps{
-              bat 'java -jar target\\devops-integration.jar'
-           }
-      }
+        }
+
+        stage('6. Docker Image Build') {
+            // Build Docker Image 
+            steps{
+                dir('DevopsProject1') {      // go to directory where 'Dockerfile' is stored
+                    script {
+                      def JOB = env.JOB_NAME.toLowerCase()           // Convert Jenkins Job name to lower-case
+                      sh "docker build -t ${JOB}:${BUILD_NUMBER} ."  // 'JOB_NAME' & 'BUILD_NUMBER' are Jenkins Global variable
+                    }
+                }
+            }
+        }
+        
+        stage('7. Docker Image Tag') {
+            // Rename the Docker Image before pushing to Dockerhub
+            steps{
+                 {      // go to directory where Docker Image is created
+                  script {
+                    def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
+                    sh "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+                    sh "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:latest"
+                  }
+                }
+            } 
+        }
+
     }
     post{
         always{
