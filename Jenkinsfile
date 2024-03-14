@@ -43,17 +43,17 @@ pipeline {
                 }
             }
         
-       stage('archive and test result'){
+        stage('archive and test result'){
           steps{
             
             archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
             }
         
        }
-      stage(' run the jar file '){
+        stage(' run the jar file '){
           steps{
-              bat java -jar '**/*.jar'
-    }
+              bat 'java -jar **/*.jar' 
+           }
       }
     }
     post{
