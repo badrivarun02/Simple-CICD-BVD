@@ -70,7 +70,7 @@ pipeline {
         stage('7. Docker Image Tag') {
             // Rename the Docker Image before pushing to Dockerhub
             steps{
-                 {      // go to directory where Docker Image is created
+                     // go to directory where Docker Image is created
                   script {
                     def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
                     bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
@@ -80,7 +80,7 @@ pipeline {
             } 
         }
 
-    }
+    
     post{
         always{
             emailext (
@@ -92,9 +92,9 @@ pipeline {
            }
     }
      
+}    
        
-       
-}
+
     
 
         
