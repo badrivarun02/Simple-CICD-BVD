@@ -58,10 +58,10 @@ pipeline {
         stage('6. Docker Image Build') {
             // Build Docker Image 
             steps{
-                dir('DevopsProject1') {      // go to directory where 'Dockerfile' is stored
+                {      // go to directory where 'Dockerfile' is stored
                     script {
                       def JOB = env.JOB_NAME.toLowerCase()           // Convert Jenkins Job name to lower-case
-                      sh "docker build -t ${JOB}:${BUILD_NUMBER} ."  // 'JOB_NAME' & 'BUILD_NUMBER' are Jenkins Global variable
+                      bat "docker build -t ${JOB}:${BUILD_NUMBER} ."  // 'JOB_NAME' & 'BUILD_NUMBER' are Jenkins Global variable
                     }
                 }
             }
@@ -73,8 +73,8 @@ pipeline {
                  {      // go to directory where Docker Image is created
                   script {
                     def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
-                    sh "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
-                    sh "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:latest"
+                    bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+                    bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:latest"
                   }
                 }
             } 
