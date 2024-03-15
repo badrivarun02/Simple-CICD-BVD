@@ -2,7 +2,7 @@ pipeline {
     agent any
      // DECLARE THE VARIABLES HERE:
     environment {
-        DOCKER_USERNAME = "Dockeruser"     // check the 'ID' in your Jenkins credentials
+        DOCKER_USERNAME = "badrivarun"     // check the 'ID' in your Jenkins credentials
     }
 
     stages {
@@ -74,7 +74,7 @@ pipeline {
                   script {
                     def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
                     bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
-                    bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:latest"
+                   
                   }
                 }
             } 
