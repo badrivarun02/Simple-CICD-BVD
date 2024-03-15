@@ -84,8 +84,9 @@ pipeline {
     post{
         always{
             emailext (
-                    subject: "Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: """<p>See the attached build log for details.</p>""",
+                    subject: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                     body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                             <p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
                     to: 'badrivarun09@gmail.com',
                     attachLog: true
                 )
