@@ -21,7 +21,7 @@ pipeline {
                 
             }
         } 
-                stage("3. Maven Unit Test") {  
+        stage("3. Maven Unit Test") {  
             // Test the individual units of code 
             steps{
                 
