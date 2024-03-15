@@ -82,7 +82,7 @@ pipeline {
             // Scan Docker images for vulnerabilities 
             steps{
                 script { 
-                  //def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
+                  def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
                   def imageName = "${DOCKER_USERNAME}/${JOB}:${BUILD_NUMBER}"
                   bat "trivy image --scanners vuln ${imageName} > scan.txt"
                 }
