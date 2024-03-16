@@ -85,7 +85,11 @@ pipeline {
             steps{
                 script { 
                   withCredentials([string(credentialsId: 'Dockerpwd', variable: 'dockerpos')]) {
-                    bat " docker login -u badrivarun -p ${dockerpos}"
+                   bat '''
+                            echo "${dockerpos}" > pwd.txt
+                            docker login -u badrivarun --password-stdin < pwd.txt
+                            rm pwd.txt
+                                 '''
                    //bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"    
                     bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"      
                   }
