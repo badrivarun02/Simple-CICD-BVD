@@ -91,7 +91,7 @@ pipeline {
                   }
                 }
             }
-        
+        }
 
         stage('9. Docker Image Cleanup') {
             // Remove the unwanted (dangling) images created in Jenkins Server to free-up space
@@ -102,7 +102,7 @@ pipeline {
             }
         }
     }
-
+    
     
     post{
         always{
