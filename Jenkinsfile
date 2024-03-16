@@ -84,10 +84,10 @@ pipeline {
             // Login to Dockerhub & Push the image to Dockerhub
             steps{
                 script { 
-                   
-                    bat 'echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin'
-                  
-                    bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"      
+                    withDockerRegistry(credentialsId: 'dockercred', url: 'https://registry-1.docker.io/v2/', variable: "dockerpos") {
+                    //bat 'echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin'
+                    bat 'docker login -u ${DOCKER_USERNAME} -p ${dockerpos}'
+                    bat 'docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}'
                   }
                 }
             }
