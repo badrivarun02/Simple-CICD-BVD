@@ -66,7 +66,7 @@ pipeline {
            script {
             def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
             def dockerImage = docker.build("${JOB}:${BUILD_NUMBER}") 
-            dockerImage.addTag("${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}")
+            bat "docker tag ${dockerImage.id} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
              }
           }
         }
