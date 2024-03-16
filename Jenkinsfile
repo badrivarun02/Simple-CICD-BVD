@@ -95,7 +95,7 @@ pipeline {
             // Login to Dockerhub & Push the image to Dockerhub
             steps{
                 script { 
-                 docker.withRegistry('', 'DOCKER_USERNAME' )  {
+                 docker.withRegistry('', DOCKER_USERNAME )  {
                     
                     def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
                     bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
