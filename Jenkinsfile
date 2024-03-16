@@ -71,6 +71,8 @@ pipeline {
             def dockerImage = docker.build("${JOB}:${BUILD_NUMBER}")
             def newTag = "${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
             dockerImage.addTag(newTag)
+            env.DOCKER_IMAGE_ID = dockerImage.id
+            env.NEW_TAG = newTag
              }
           }
         }
@@ -89,7 +91,7 @@ pipeline {
                 script { 
                   docker.withRegistry('', 'credentialsid') {
                    //bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"    
-                    docker.image(newTag).push()        
+                    bat "docker push ${env.NEW_TAG}"      
                   }
                 }
             }
