@@ -61,12 +61,12 @@ pipeline {
         
         }
 
-        stage('6. Docker Image Build') {
+        stage('6. Docker Image Build and tag ') {
           steps{
            script {
-            def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
-            def dockerImage = docker.build("${JOB}:${BUILD_NUMBER}") 
-            bat "docker tag ${dockerImage.id} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+            def JOB = env.JOB_NAME.toLowerCase()           // Convert Jenkins Job name to lower-case
+            bat "docker build -t ${JOB}:${BUILD_NUMBER} ."
+            bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
             
              }
           }
