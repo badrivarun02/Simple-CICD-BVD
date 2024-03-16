@@ -6,7 +6,9 @@ pipeline {
     agent any
      // DECLARE THE VARIABLES HERE:
     environment {
-        DOCKER_USERNAME = "badrivarun"     // check the 'ID' in your Jenkins credentials
+        DOCKER_USERNAME = "badrivarun"     // docker username
+        credentialsid= "Dockerpwd"    // dockerpwd as check the 'ID' in your Jenkins credentials
+
     }
 
     stages {
@@ -60,29 +62,15 @@ pipeline {
         }
 
         stage('6. Docker Image Build') {
-            // Build Docker Image 
-            steps{
-                    // go to directory where 'Dockerfile' is stored
-                    script {
-                      def JOB = env.JOB_NAME.toLowerCase()           // Convert Jenkins Job name to lower-case
-                      bat "docker build -t ${JOB}:${BUILD_NUMBER} ."  // 'JOB_NAME' & 'BUILD_NUMBER' are Jenkins Global variable
-                    }
-                }
-            }
-        
-        
-        stage('7. Docker Image Tag') {
-            // Rename the Docker Image before pushing to Dockerhub
-            steps{
-                     // go to directory where Docker Image is created
-                  script {
-                    def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
-                    bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
-                   
-                  }
-                }
-            } 
-        stage('8. Trivy Image Scan') {
+          steps{
+           script {
+            def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
+            def dockerImage = docker.build("${JOB}:${BUILD_NUMBER}")
+            dockerImage.tag("${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}")
+             }
+          }
+        }
+        stage('7. Trivy Image Scan') {
             // Scan Docker images for vulnerabilities 
             steps{
                 script { 
@@ -91,24 +79,18 @@ pipeline {
                 }
             }
         }
-        stage('9. Docker Image Push') {
+        stage('8. Docker Image Push') {
             // Login to Dockerhub & Push the image to Dockerhub
             steps{
                 script { 
-                 withCredentials([string(credentialsId: 'Dockerpwd', variable: 'docker_pass')]) {
-                    bat '''
-                    echo "${docker_pass}" | docker login -u badrivarun --password-stdin
-                    '''    
-                    def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
-                    bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
-                   
-                    
+                  docker.withRegistry('', 'credentialsid') {
+                   dockerImage.push("${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}")               
                   }
                 }
             }
         }
 
-        stage('10. Docker Image Cleanup') {
+        stage('9. Docker Image Cleanup') {
             // Remove the unwanted (dangling) images created in Jenkins Server to free-up space
             steps{
                 script { 
