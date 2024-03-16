@@ -84,7 +84,7 @@ pipeline {
             steps{
                 script { 
                   docker.withRegistry('', 'credentialsid') {
-                   dockerImage.push("${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}")               
+                   bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"            
                   }
                 }
             }
