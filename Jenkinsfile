@@ -95,8 +95,8 @@ pipeline {
             // Login to Dockerhub & Push the image to Dockerhub
             steps{
                 script { 
-                 withCredentials([usernamePassword(credentialsId: 'badrivarun', usernameVariable: 'docker_user', passwordVariable: 'docker_pass')]) {
-                    bat "echo %docker_pass% | docker login -u %docker_user% --password-stdin"
+                 withCredentials([string(credentialsId: 'Dockerpwd', variable: 'docker_pass')]) {
+                    bat "docker login -u badrivarun -p ${docker_pass}"
                     def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
                     bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
                    
