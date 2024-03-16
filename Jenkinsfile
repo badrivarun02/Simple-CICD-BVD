@@ -7,7 +7,7 @@ pipeline {
      // DECLARE THE VARIABLES HERE:
     environment {
         DOCKER_USERNAME = "badrivarun"     // docker username
-        credentialsid= "Dockerpwd"    // dockerpwd as check the 'ID' in your Jenkins credentials
+        credentialsid= "dockerpwd"    // dockerpwd as check the 'ID' in your Jenkins credentials
 
     }
 
@@ -85,11 +85,11 @@ pipeline {
             steps{
                 script { 
                   withCredentials([string(credentialsId: 'Dockerpwd', variable: 'dockerpos')]) {
-                   bat '''
-                            echo "${dockerpos}" > pwd.txt
-                            docker login -u badrivarun --password-stdin < pwd.txt
-                            rm pwd.txt
-                                 '''
+                    bat '''
+                    echo %dockerpos% > pat.txt
+                    docker login -u badrivarun --password-stdin < pat.txt
+                    del pat.txt
+                     '''
                    //bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"    
                     bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"      
                   }
