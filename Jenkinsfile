@@ -64,15 +64,10 @@ pipeline {
         stage('6. Docker Image Build') {
           steps{
            script {
-            //def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
-            //def dockerImage = docker.build("${JOB}:${BUILD_NUMBER}") 
-            //bat "docker tag ${dockerImage.id} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
             def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
-            def dockerImage = docker.build("${JOB}:${BUILD_NUMBER}")
-            def newTag = "${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
-            dockerImage.addTag(newTag)
-            env.DOCKER_IMAGE_ID = dockerImage.id
-            env.NEW_TAG = newTag
+            def dockerImage = docker.build("${JOB}:${BUILD_NUMBER}") 
+            bat "docker tag ${dockerImage.id} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+            
              }
           }
         }
@@ -89,9 +84,10 @@ pipeline {
             // Login to Dockerhub & Push the image to Dockerhub
             steps{
                 script { 
-                  docker.withRegistry('', 'credentialsid') {
+                  withCredentials([string(credentialsId: 'Dockerpwd', variable: 'dockerpos')]) {
+                    bat " docker login -u badrivarun -p ${dockerpos}"
                    //bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"    
-                    bat "docker push ${env.NEW_TAG}"      
+                    bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"      
                   }
                 }
             }
