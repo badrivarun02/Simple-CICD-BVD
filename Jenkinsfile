@@ -96,7 +96,7 @@ pipeline {
             steps{
                 script { 
                  withCredentials([usernamePassword(credentialsId: 'badrivarun', usernameVariable: 'docker_user', passwordVariable: 'docker_pass')]) {
-                    bat "docker login -u '${docker_user}' --password-stdin '${docker_pass}'"
+                    bat "echo %docker_pass% | docker login -u %docker_user% --password-stdin"
                     def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
                     bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
                    
