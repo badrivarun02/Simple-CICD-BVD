@@ -7,7 +7,7 @@ pipeline {
      // DECLARE THE VARIABLES HERE:
     environment {
         DOCKER_USERNAME = "badrivarun"     // docker username
-        credentialsid= "dockerpwd"    // dockerpwd as check the 'ID' in your Jenkins credentials
+        DOCKERHUB_CREDENTIALS=credentials('dockercred')   // dockerpwd as check the 'ID' in your Jenkins credentials
 
     }
 
@@ -84,13 +84,9 @@ pipeline {
             // Login to Dockerhub & Push the image to Dockerhub
             steps{
                 script { 
-                  withCredentials([string(credentialsId: 'Dockerpwd', variable: 'dockerpos')]) {
-                    bat '''
-                    echo %dockerpos% > pat.txt
-                    docker login -u badrivarun --password-stdin < pat.txt
-                    del pat.txt
-                     '''
-                   //bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"    
+                   
+                    bat 'echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin'
+                  
                     bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"      
                   }
                 }
