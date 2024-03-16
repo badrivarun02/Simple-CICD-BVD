@@ -1,3 +1,7 @@
+// JENKINS CI PIPELINE/
+// Purpose: The Code will be built into executable file (.jar) & pushed to Dockerhub
+
+
 pipeline {
     agent any
      // DECLARE THE VARIABLES HERE:
@@ -87,10 +91,29 @@ pipeline {
                 }
             }
         }
-        
-
-        
+        stage('9. Docker Image Push') {
+            // Login to Dockerhub & Push the image to Dockerhub
+            steps{
+                script { 
+                 docker.withRegistry('', 'DOCKER_USERNAME' )  {
+                    
+                    def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins Job name to lower-case
+                    bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+                    
+                  }
+                }
+            }
         }
+
+        stage('10. Docker Image Cleanup') {
+            // Remove the unwanted (dangling) images created in Jenkins Server to free-up space
+            steps{
+                script { 
+                  bat "docker image prune -af"
+                }
+            }
+        }
+    }
 
     
     post{
