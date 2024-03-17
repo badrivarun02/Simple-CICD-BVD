@@ -64,10 +64,9 @@ pipeline {
         stage('6. Docker Image Build and tag ') {
           steps{
            script {
-            def JOB = env.JOB_NAME.toLowerCase()           // Convert Jenkins Job name to lower-case
-            bat "docker build -t ${JOB}:${BUILD_NUMBER} ."
-            bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
-            
+                def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins job name to lowercase
+                bat "docker build -t ${JOB}:${BUILD_NUMBER} ."
+                bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"                    
              }
           }
         }
@@ -84,10 +83,9 @@ pipeline {
             // Login to Dockerhub & Push the image to Dockerhub
             steps{
                 script { 
-                    withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerpos')]) {
-                     bat 'docker login -u ${dDOCKER_USERNAME} -p ${dockerpos}'
-                    
-                     bat 'docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}'
+                    def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins job name to lowercase
+                    withDockerRegistry(credentialsId: 'dockerpwd') {
+                        bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
                   }
                 }
             }
