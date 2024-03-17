@@ -84,8 +84,17 @@ pipeline {
             steps{
                 script { 
                     def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins job name to lowercase
+                /* Method:1 
                     withDockerRegistry(credentialsId: 'dockerpwd') {
+                        bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}" 
+                        */
+                //Method:2
+                // Convert Jenkins job name to lowercase
+                    withCredentials([usernamePassword(credentialsId: 'dockerpwd', passwordVariable: 'dockerp', usernameVariable: 'dockeruser')]) {
+                        bat "docker login -u %dockeruser% -p %dockerp%"   // login into docker account , we can also use like this- bat "docker login -u ${dockeruser} -p ${dockerp}"
+
                         bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+                      
                   }
                 }
             }
