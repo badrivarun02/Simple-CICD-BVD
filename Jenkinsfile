@@ -23,7 +23,7 @@ pipeline {
             // 'Pipeline syntax' --> Steps 'Smaple step' --> git (enter url & branch & generate)
             steps {
                 
-                git branch: 'main', url: 'https://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@github.com/badrivarun02/Java2024.git'
+                git branch: 'main', url: 'https://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@github.com/badrivarun02/Java2024.git'
                 
             }
         } 
@@ -108,6 +108,24 @@ pipeline {
                 }
             }
         }
+        stage("deploy onto kubernetes"){
+            steps{
+                withCredentials([string(credentialsId: 'my-ca-certificate', variable: 'CA_CERTIFICATE')]) {
+                    kubeconfig(
+                        credentialsId: 'kuberents',
+                        serverUrl: '',
+                        caCertificate: "${env.CA_CERTIFICATE}"
+                    ) {
+                        bat 'kubectl apply -f SAforJenkins.yaml'
+                        bat 'kubectl apply -f deployment.yaml'
+                        bat 'kubectl apply -f service.yaml'
+                        bat 'kubectl get all'
+
+                        
+                    }
+                }
+            }
+        }  
     }
     
     

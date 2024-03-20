@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydeploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mydeploy1
+  template:
+    metadata:
+      name: mypod1
+      labels:
+        name: mydeploy1
+    spec:
+      serviceAccountName: jenkins  # Use the Jenkins ServiceAccount
+      containers:
+      - name: mycontainer
+        image: badrivarun/javapp:v23  # replace with your Docker-image pushed on Dockerhub
+        ports:
+        - containerPort: 8080
+
+ 
