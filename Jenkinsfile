@@ -66,7 +66,8 @@ pipeline {
            script {
                 def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins job name to lowercase
                 bat "docker build -t ${JOB}:${BUILD_NUMBER} ."
-                bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"                    
+                bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+                bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:latest"                    
              }
           }
         }
@@ -94,6 +95,7 @@ pipeline {
                         bat "docker login -u %dockeruser% -p %dockerp%"   // login into docker account , we can also use like this- bat "docker login -u ${dockeruser} -p ${dockerp}"
 
                         bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+                        bat "docker push ${DOCKER_USERNAME}/${JOB}:latest"
                       
                   }
                 }
