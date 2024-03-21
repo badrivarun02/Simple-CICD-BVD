@@ -112,18 +112,14 @@ pipeline {
         }
         stage("deploy onto kubernetes"){
             steps{
-                withCredentials([string(credentialsId: 'my-ca-certificate', variable: 'CA_CERTIFICATE')]) {
+                withCredentials([file(credentialsId: 'config', variable: 'CA_CERTIFICATE')]) {
                     kubeconfig(
-                        credentialsId: 'kuberents',
+                        credentialsId: 'config',
                         serverUrl: '',
-                        caCertificate: "${env.CA_CERTIFICATE}"
+                        caCertificate: '%env.CA_CERTIFICATE%'
                     ) {
-                        bat 'kubectl apply -f SAforJenkins.yaml'
-                        bat 'kubectl apply -f deployment.yaml'
-                        bat 'kubectl apply -f service.yaml'
+                       bat 'kubectl apply -f SAforJenkins.yaml -f deployment.yaml -f service.yaml'
                         bat 'kubectl get all'
-
-                        
                     }
                 }
             }
