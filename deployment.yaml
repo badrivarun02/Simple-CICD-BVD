@@ -16,7 +16,7 @@ spec:
       serviceAccountName: jenkins  # Use the Jenkins ServiceAccount
       containers:
       - name: mycontainer
-        image: badrivarun/javapp:latest  # replace with your Docker-image pushed on Dockerhub
+        image: badrivarun/javapp  # replace with your Docker-image pushed on Dockerhub
         ports:
         - containerPort: 8080
 
