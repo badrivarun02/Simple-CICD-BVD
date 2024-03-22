@@ -12,12 +12,13 @@ pipeline {
     }
 
     stages {
-        stage("1. Cleanup") {
+        stage ("1. Cleanup") {
             // Clean workspace directory for the current build
             steps {
                 deleteDir ()             
             }
-        }
+           }
+         
         stage ('2. Git Checkout') {
             // use pipeline syntax generator to generate below step
             // 'Pipeline syntax' --> Steps 'Smaple step' --> git (enter url & branch & generate)
@@ -101,6 +102,7 @@ pipeline {
                 }
             }
         }
+    
 
         stage('9. Docker Image Cleanup') {
             // Remove the unwanted (dangling) images created in Jenkins Server to free-up space
@@ -127,19 +129,36 @@ pipeline {
     }
     
     
-    post{
-        always{
-            emailext (
-                    subject: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                     body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                             <p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
-                    to: 'badrivarun09@gmail.com',
-                    attachLog: true
-                )
-           }
+    post {
+    always {
+        script{
+                env.BUILD_TIMESTAMP = new Date(currentBuild.startTimeInMillis).format('MMMM dd, yyy | hh:mm:ss aaa | z')
+            }
+        emailext (
+            subject: "${currentBuild.currentResult} Build Report as of ${BUILD_TIMESTAMP} — ${env.JOB_NAME}",
+            body: """The Build report for ${env.JOB_NAME} executed via Jenkins has finished its latest run.
+
+- Job Name: ${env.JOB_NAME}
+- Job Status: ${currentBuild.currentResult}
+- Job Number: ${env.BUILD_NUMBER}
+- Job URL: ${env.BUILD_URL}
+
+Please refer to the build information above for additional details.
+
+This email is generated automatically by the system.
+
+Thanks""",
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+            to: 'badrivarun09@gmail.com',
+            attachLog: true
+        )
     }
+}
+}
+
+    
      
-}    
+    
        
 
     
