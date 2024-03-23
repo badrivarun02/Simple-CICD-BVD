@@ -24,7 +24,7 @@ pipeline {
             // 'Pipeline syntax' --> Steps 'Smaple step' --> git (enter url & branch & generate)
             steps {
                 // Checks out code from the specified git repository
-                git branch: 'main', url: 'https://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@github.com/badrivarun02/Java2024.git'
+                git branch: 'main', url: 'https://github.com/badrivarun02/Simple-CICD-BVD.git'
                 
             }
         } 
