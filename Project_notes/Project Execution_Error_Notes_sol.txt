@@ -1,0 +1,115 @@
+# Error Notes and Solutions
+
+During the execution of the CI/CD pipeline, you may encounter several issues. Here are some common errors and their solutions:
+
+## Error 0: Path Setup and Syntax Issues
+
+### Issue
+
+a. When cloning the repo, it clones and stores the files in the workspace under the Jenkins home directory. From that workspace directory, we should run the Maven commands. However, it was unable to take the exact location of the file while executing Maven. It showed that it was unable to find the files. Actually, one wrong syntax/step was added like `dir("path_to_loc")`. 
+
+b. Syntax issues included spacing, flower brackets, and adding wrong syntax keywords.
+
+### Solution
+
+a. Remove the step `dir("path_to_loc")` from the scripts.
+
+b. Ensure correct syntax is used, including proper spacing, use of brackets, and keywords.
+
+## Error 1: Docker Build Error
+
+### Issue
+
+When running the command `docker build -t javapp:38 .` in the Jenkins workspace `C:\Users\Username\.jenkins\workspace\javapp`, the following error occurred: 
+
+```
+ERROR: error during connect: in the default daemon configuration on Windows, the docker client must be run with elevated privileges to connect: Get "http://%2F%2F.%2Fpipe%2Fdocker_engine/_ping": open //./pipe/docker_engine: The system cannot find the file specified.
+```
+
+### Solution
+
+Check/Verify if the Docker application is running. If not, start the application to resolve the problem.
+
+## Error 2: Docker Push Error
+
+### Issue
+
+When executing the command `docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}` in the Jenkins workspace `C:\Users\Username\.jenkins\workspace\javapp`, an error occurred: 
+
+```
+invalid reference format: repository name (${JOB}) must be lowercase
+```
+
+### Solution
+
+The error was caused by the use of single quotation marks (`'`) in the `bat` command within the Docker push stage: `bat 'docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}'`. This prevented the string interpolation of the `${DOCKER_USERNAME}`, `${JOB}`, and `${BUILD_NUMBER}` variables.
+
+To resolve this issue, use double quotation marks (`"`) for string values in Groovy (the language used for Jenkinsfiles), as they allow for string interpolation (i.e., replacing `${...}` with the value of the variable within the string).
+
+For example, the corrected command would be: `bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"`. In this corrected command, the variables within the string will be correctly interpreted.
+
+## Error 3: Docker Image Tag Error
+
+### Issue
+
+If you didn't push an image with the `latest` tag to the Docker registry, and you try to pull from the registry without specifying a tag, Docker will look for the `latest` tag by default. If it doesn't find an image with the `latest` tag, it will return an error.
+
+### Solution
+
+When you push an image to the registry, if you don't specify a tag, Docker will assign the `latest` tag to the image by default. However, if you push the image with a specific tag and don't push an image with the `latest` tag, Docker won't be able to find the `latest` image.
+
+So, if you want to be able to pull the image without specifying a tag, you should push an image with the `latest` tag to the registry. You can do this by using the `docker push` command with your image name followed by `:latest`, like so:
+
+```bash
+docker push your_image_name:latest
+```
+
+Alternatively, you can pull the image by specifying the exact tag that you pushed:
+
+```bash
+docker pull your_image_name:your_specific_tag
+```
+
+
+Error 4: Docker Connection Error
+Issue
+The error message was: curl : The underlying connection was closed: The connection was closed unexpectedly. This error occurred when trying to access the application via curl http://localhost:30247.
+
+
+
+Solution
+The issue was with the Kubernetes Service configuration. In the Deployment configuration, the application’s container port was set to 8080 (containerPort: 8080). However, in the Service configuration, the target port was incorrectly set to 8085 (targetPort: 8085).
+
+The targetPort in the Service configuration should match the containerPort in the Deployment configuration. This is because the targetPort is the port on the Pod that the Service forwards traffic to.
+
+Before correcting the manifest files:
+
+Deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+...
+spec:
+  serviceAccountName: jenkins  # Use the Jenkins ServiceAccount
+  containers:
+  - name: mycontainer
+    image: <imagename> # replace with your Docker-image pushed on Dockerhub
+    ports:
+    - containerPort: 8080
+
+Service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myservice2
+spec:
+  type: NodePort
+  selector:
+    name: mydeploy1
+  ports:
+    - protocol: TCP
+      port: 8085
+      targetPort: 8085  # This was the mistake. It should match the containerPort in the Deployment.
+
+After identifying the issue, the targetPort in the Service configuration was corrected to match the containerPort in the Deployment configuration (targetPort: 8080).

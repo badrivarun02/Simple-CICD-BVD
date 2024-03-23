@@ -1,0 +1,11 @@
+# Directories
+target/classes/
+target/generated-sources/
+target/generated-test-sources/
+target/maven-archiver/
+target/maven-status/
+target/surefire-reports/
+target/test-classes/
+
+# File
+target/devops-integration
