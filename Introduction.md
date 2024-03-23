@@ -1,7 +1,7 @@
  #  **Implementing a Fundamental CI/CD Pipeline on a Local Windows 10 System** 
 
 This project demonstrates how to set up a fundamental Continuous Integration/Continuous Deployment (CI/CD) pipeline on a local Windows 10 system. The pipeline is designed for a Java application and utilizes several tools and technologies including **Jenkins**, **Maven**, **Docker**, **Kubernetes**, and **Cloudflare**.
-![](Project_notes/CICD.jpg)
+
 ## **Prerequisites**
 
 The following tools and technologies are required for this project:
@@ -30,7 +30,9 @@ GitHub Integration with Jenkins via Webhook: Automate your CI/CD pipeline by int
 
 ### **Pipeline Execution**
 
-This Jenkinsfile is a Continuous Integration (CI) and Continuous Deployment CD pipeline that builds a Java application into an executable .jar file and pushes it to Dockerhub, and deploys it to a Kubernetes cluster. It includes stages for cleaning up the workspace, checking out the code from **Git**, running unit tests and integration tests with **Maven**, building a **Docker** image, scanning the image for vulnerabilities with **Trivy**,  pushing the image to Dockerhub, and deploys it to a **Kubernetes** cluster. It includes stages for cleaning up Docker images, deploying to Kubernetes, and sending an email report after the build
+This Jenkinsfile is a Continuous Integration (CI) and Continuous Deployment CD pipeline that builds a Java application into an executable .jar file and pushes it to Dockerhub, and deploys it to a Kubernetes cluster. It includes stages for cleaning up the workspace, checking out the code from **Git**, running unit tests and integration tests with **Maven**, building a **Docker** image, scanning the image for vulnerabilities with **Trivy**,  pushing the image to Dockerhub, and deploys it to a **Kubernetes** cluster. It includes stages for cleaning up Docker images, deploying to Kubernetes, and sending an email report after the build.
+
+   ![](Project_notes/CICD.jpg) 
 
 ## **Common Errors and Solutions**
 
