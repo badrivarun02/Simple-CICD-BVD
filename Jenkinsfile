@@ -66,11 +66,14 @@ pipeline {
           steps{
            script {
                 def JOB = env.JOB_NAME.toLowerCase() // Convert Jenkins job name to lowercase
+                withCredentials([usernamePassword(credentialsId: 'dockerpwd', passwordVariable: 'dockerp', usernameVariable: 'dockeruser')]) {
+                        // Login into Docker account
+                        bat "docker login -u %dockeruser% -p %dockerp%"   // We can also use like this- bat "docker login -u ${dockeruser} -p ${dockerp}"
                 // Build the Docker image
-                bat "docker build -t ${JOB}:${BUILD_NUMBER} ."
+                        bat "docker build -t ${JOB}:${BUILD_NUMBER} ."
                 // Tag the Docker image
-                bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
-                bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:latest"                    
+                        bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
+                        bat "docker tag ${JOB}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${JOB}:latest"                    
              }
           }
         }
@@ -96,9 +99,7 @@ pipeline {
                     // }
                     // Method:2
                     // Convert Jenkins job name to lowercase
-                    withCredentials([usernamePassword(credentialsId: 'dockerpwd', passwordVariable: 'dockerp', usernameVariable: 'dockeruser')]) {
-                        // Login into Docker account
-                        bat "docker login -u %dockeruser% -p %dockerp%"   // We can also use like this- bat "docker login -u ${dockeruser} -p ${dockerp}"
+                    
                         // Push the Docker image to Dockerhub
 
                         bat "docker push ${DOCKER_USERNAME}/${JOB}:v${BUILD_NUMBER}"
