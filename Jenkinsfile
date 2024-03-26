@@ -77,6 +77,7 @@ pipeline {
              }
           }
         }
+        }
         stage('7. Trivy Image Scan') {
             // Scan Docker images for vulnerabilities 
             steps{
