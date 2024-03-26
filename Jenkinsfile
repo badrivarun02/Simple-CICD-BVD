@@ -109,7 +109,7 @@ pipeline {
                   }
                 }
             }
-        }
+        
     
 
         stage('9. Docker Image Cleanup') {
