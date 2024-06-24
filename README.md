@@ -1,7 +1,7 @@
 # 🚀 Project Description
 
 This project aims to automate the process of software development, testing, and deployment using a variety of tools. Each tool has a specific role in the process, and the flowchart outlines how they interact with each other. The “Fail” paths indicate points where the process can be halted if certain criteria aren’t met, ensuring quality control.
-
+        ![](Project_notes/CICD.jpg)
 ## 🛠️ Tools Used
 
 - **Jenkins**: Used for continuous integration and starts the process. Automates parts of the software development process with continuous integration and facilitates technical aspects of continuous delivery.
