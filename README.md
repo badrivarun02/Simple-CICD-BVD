@@ -12,3 +12,8 @@ This project aims to automate the process of software development, testing, and 
 - **Trivy**: A simple and comprehensive vulnerability scanner for containers. Used in this project for scanning container images for vulnerabilities.
 - **Gmail**: Used for sending notifications or alerts during the development and deployment process.
 - **Windows 10**: A platform where builds are tested.
+
+[Integration Notes Reference][another-file] ...
+
+[another-file]: ./Project_notes/Tools_Integration_with_Jenkins_notes.md
+
